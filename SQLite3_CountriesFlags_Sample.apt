@@ -1,0 +1,2531 @@
+.head 0 +  Application Description: ____________________________________________________________________
+SQLite3 Countries & Flags Sample 	ANSI and UNICODE
+
+Source version:	1.0.0	(for TD 2.1 and up)
+
+Description:
+Sample to show the use of SQLite3 embedded databases in TD.
+
+UNCOMMENT THE NEEDED LIBRARY, SEE Libraries section
+
+It uses 2 local file databases:
+
+  - Countries.db	-> contains all country names, codes etc
+  - CountryFlags.db	-> contains bmp and png images (different sizes), the flags
+
+The sample creates also a memory database (for persons).
+When saved to disk it will be MyPersonsDatabase.db.
+
+A simple editor shows how to SELECT, INSERT, UPDATE and DELETE
+
+
+Created by 	Dave Rabelink	19-12-2018
+Updated by
+____________________________________________________________________
+.head 1 -  Outline Version - 4.0.28
+.head 1 +  Design-time Settings
+.data VIEWINFO
+0000: 6F00000001000000 FFFF01000D004347 5458566965775374 6174650400010000
+0020: 00000000001F0100 002C000000020000 0003000000FFFFFF FFFFFFFFFFF8FFFF
+0040: FFE1FFFFFF320000 00320000008A0200 00EF010000010000 0001000000010000
+0060: 000F4170706C6963 6174696F6E497465 6D00000000
+.enddata
+.head 2 -  Outline Window State: Normal
+.head 2 +  Outline Window Location and Size
+.head 3 -  Left: Default
+.head 3 -  Top: Default
+.head 3 -  Width:  Default
+.head 3 -  Height: Default
+.head 2 +  Options Box Location
+.head 3 -  Visible? Yes
+.head 3 -  Left: Default
+.head 3 -  Top: Default
+.head 3 -  Width:  Default
+.head 3 -  Height: Default
+.head 2 +  Class Editor Location
+.head 3 -  Visible? No
+.head 3 -  Left: Default
+.head 3 -  Top: Default
+.head 3 -  Width:  Default
+.head 3 -  Height: Default
+.head 2 +  Tool Palette Location
+.head 3 -  Visible? No
+.head 3 -  Left: Default
+.head 3 -  Top: Default
+.head 2 -  Fully Qualified External References? Yes
+.head 2 -  Reject Multiple Window Instances? No
+.head 2 -  Enable Runtime Checks Of External References? Yes
+.head 2 -  Use Release 4.0 Scope Rules? No
+.head 2 -  ! Edit Fields Read Only On Disable? No
+.head 2 -  ! Edit Fields Read Only On Disable? No
+.head 2 -  ! Assembly Symbol File:
+.head 1 +  Libraries
+.head 2 -  ! BEWARE -> BELOW
+
+	Include the ANSI library	for TD 2.1 to TD 4.2
+	Include the UNICODE library	for TD 5.1 and up
+.head 2 -  !
+.head 2 -  ! File Include: SQLite3_API_ANSI.apl
+.head 2 -  ! File Include: SQLite3_API_UNICODE.apl
+.head 2 -  !
+.head 2 -  File Include: vtlbx.apl
+.head 2 -  File Include: vtdos.apl
+.head 2 -  File Include: vtfile.apl
+.head 1 +  Global Declarations
+.head 2 +  Window Defaults
+.head 3 +  Tool Bar
+.head 4 -  Display Style? Etched
+.head 4 -  Font Name: Tahoma
+.head 4 -  Font Size: 10
+.head 4 -  Font Enhancement: System Default
+.head 4 -  Text Color: System Default
+.head 4 -  Background Color: System Default
+.head 3 +  Form Window
+.head 4 -  Display Style? Etched
+.head 4 -  Font Name: Tahoma
+.head 4 -  Font Size: 10
+.head 4 -  Font Enhancement: System Default
+.head 4 -  Text Color: System Default
+.head 4 -  Background Color: System Default
+.head 3 +  Dialog Box
+.head 4 -  Display Style? Etched
+.head 4 -  Font Name: Tahoma
+.head 4 -  Font Size: 10
+.head 4 -  Font Enhancement: System Default
+.head 4 -  Text Color: System Default
+.head 4 -  Background Color: System Default
+.head 3 +  Top Level Table Window
+.head 4 -  Font Name: Microsoft Sans Serif
+.head 4 -  Font Size: System Default
+.head 4 -  Font Enhancement: System Default
+.head 4 -  Text Color: System Default
+.head 4 -  Background Color: System Default
+.head 3 +  Data Field
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Multiline Field
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Spin Field
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Background Text
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Pushbutton
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 3 +  Radio Button
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Check Box
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Option Button
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 3 +  Group Box
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Child Table Window
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  List Box
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Combo Box
+.head 4 -  Font Name: Use Parent
+.head 4 -  Font Size: Use Parent
+.head 4 -  Font Enhancement: Use Parent
+.head 4 -  Text Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Line
+.head 4 -  Line Color: Use Parent
+.head 3 +  Frame
+.head 4 -  Border Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 3 +  Picture
+.head 4 -  Border Color: Use Parent
+.head 4 -  Background Color: Use Parent
+.head 2 +  Formats
+.head 3 -  Number: 0'%'
+.head 3 -  Number: #0
+.head 3 -  Number: ###000
+.head 3 -  Number: ###000;'('###000')'
+.head 3 -  Date/Time: hh:mm:ss AMPM
+.head 3 -  Date/Time: M/d/yy
+.head 3 -  Date/Time: MM-dd-yy
+.head 3 -  Date/Time: dd-MMM-yyyy
+.head 3 -  Date/Time: MMM d, yyyy
+.head 3 -  Date/Time: MMM d, yyyy hh:mm AMPM
+.head 3 -  Date/Time: MMMM d, yyyy hh:mm AMPM
+.head 2 +  External Functions
+.head 3 +  Library name: SHELL32.DLL
+.head 4 -  ThreadSafe: No
+.head 4 +  Function: ShellExecuteA
+.head 5 -  Description:
+.head 5 -  Export Ordinal: 0
+.head 5 +  Returns
+.head 6 -  Number: HANDLE
+.head 5 +  Parameters
+.head 6 -  Window Handle: HWND
+.head 6 -  String: LPCSTR
+.head 6 -  String: LPCSTR
+.head 6 -  String: LPCSTR
+.head 6 -  String: LPCSTR
+.head 6 -  Number: INT
+.head 2 +  Constants
+.data CCDATA
+0000: 3000000000000000 0000000000000000 00000000
+.enddata
+.data CCSIZE
+0000: 1400
+.enddata
+.head 3 +  System
+.head 4 -  Number: WM_MOUSEWHEEL	= 0x020A
+.head 4 -  Number: WM_VSCROLL		= 0x0115
+.head 4 -  Number: MK_CONTROL		= 0x0008
+.head 4 -  Number: WHEEL_DELTA 		= 120
+.head 3 -  User
+.head 3 -  Enumerations
+.head 2 -  Resources
+.head 2 +  Variables
+.data RESOURCE 0 0 1 832862059
+0000: 2200000015000000 0000000000000000 0200000100000008 0000001004000000
+0020: 020000FE00FF03
+.enddata
+.head 3 -  FunctionalVar: guMemoryDatabase		! Global object to hold DB handle of the memory database (Persons)
+.head 4 -  Class: cfcMemoryDatabase
+.head 2 +  Internal Functions
+.head 3 +  Function: PALScrollOnWheel
+.head 4 -  Description: Number PALScrollOnWheel( phWndWindow, pnwParam, pnLinesPerTick )
+Fixes smoothscrolling issue in Windows when the scrollwheel is used.
+This will prevent the strange visual scroll effect on outline listboxes.
+This function is an adaptation on the one found in SalExtension library.
+
+Parameter		Type		Description
+phWndWindow		Window handle	Object to scroll
+pnwParam		Number		wParam of the WM MOUSEWHEEL message
+pnLinesPerTick		Number		Set a fixed scroll size to scroll more lines per tick. Use 0 to use the default (will be 1)
+					Example: a value of 3 will scroll 3 lines for one wheel tick
+
+Return value :
+Number = scrollunits
+
+Created by	Dave Rabelink       	19/11/2014
+Updated by
+.head 4 +  Returns
+.head 5 -  Number:
+.head 4 +  Parameters
+.head 5 -  Window Handle: phWndWindow
+.head 5 -  Number: pnwParam
+.head 5 -  Number: pnLinesPerTick
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  Number: nKeys
+.head 5 -  Number: nScrollUnits
+.head 5 -  Number: nDelta
+.head 4 +  Actions
+.head 5 -  Set nKeys = SalNumberLow( pnwParam )
+.head 5 -  Set nDelta = SalNumberHigh( pnwParam )
+.head 5 +  If nDelta > 32767
+.head 6 -  Set nDelta = nDelta - 65536
+.head 5 -  Set nScrollUnits = SalNumberTruncate( nDelta / WHEEL_DELTA, 3, 0 )
+.head 5 +  If nScrollUnits < 0
+.head 6 +  If nKeys & MK_CONTROL = MK_CONTROL
+.head 7 -  Set pnwParam = SB_PageDown
+.head 6 +  Else
+.head 7 -  Set pnwParam = SB_LineDown
+.head 6 -  Set nScrollUnits = SalNumberAbs( nScrollUnits )
+.head 5 +  Else
+.head 6 +  If nKeys & MK_CONTROL = MK_CONTROL
+.head 7 -  Set pnwParam = SB_PageUp
+.head 6 +  Else
+.head 7 -  Set pnwParam = SB_LineUp
+.head 5 +  If pnLinesPerTick > 0 AND ( nKeys & MK_CONTROL != MK_CONTROL )
+.head 6 -  Set nScrollUnits = pnLinesPerTick
+.head 5 +  While nScrollUnits > 0
+.head 6 -  Call SalSendMsg( phWndWindow, WM_VSCROLL, pnwParam, 0 )
+.head 6 -  Set nScrollUnits = nScrollUnits - 1
+.head 5 -  Return nScrollUnits
+.head 3 +  Function: PALGetRuntimeFolder
+.head 4 -  Description: String PALGetRuntimeFolder( )
+Returns the application's runtime folder (where the exe is running from).
+This will never change during execution of the application.
+
+The folder has a trailing backslash.
+
+Use this function instead of SalFileGetCurrentDirectory. That function returns
+the current folder which can change during execution of the application.
+
+No Parameters
+
+Return value :
+String = the folder in which the current application was started. It contains a trailing backslash.
+
+Created by	Dave Rabelink       	16/04/2013
+.head 4 +  Returns
+.head 5 -  String:
+.head 4 -  Parameters
+.head 4 +  Static Variables
+.head 5 -  String: sSRuntimeFolder
+.head 4 +  Local variables
+.head 5 -  String: sDrive
+.head 5 -  String: sDir
+.head 5 -  String: sDummy
+.head 5 -  String: sFolder
+.head 4 +  Actions
+.head 5 +  If sSRuntimeFolder
+.head 6 -  Return sSRuntimeFolder
+.head 5 +  Else
+.head 6 -  Call VisDosSplitPath( strArgArray[0], sDrive, sDir, sDummy, sDummy )
+.head 6 -  Set sFolder = sDrive || sDir
+.head 6 +  If SalStrRightX( sFolder, 1 ) != "\\"
+.head 7 -  Set sFolder = sFolder || "\\"
+.head 6 -  Set sSRuntimeFolder = sFolder
+.head 6 -  Return sFolder
+.head 2 -  Named Menus
+.head 2 +  Class Definitions
+.data RESOURCE 0 0 1 3094198303
+0000: D200000078000000 0000000000000000 0200000100FFFF01 00160000436C6173
+0020: 73566172004F7574 6C696E6552006567 496E666F7D003C00 000D630052616469
+0040: 6F4C69730074426F 789A000000F00500 0000501900000001 00FE00FF9B190019
+0060: B5000100FFFF6032 0000001900ED0100 FF3F4B0058000019 0001FB00FF0F6400
+0080: 0000D6190001FE00 FF03
+.enddata
+.head 3 -  ! Class to hold memory database connection and functions to handle it
+.head 3 +  Functional Class: cfcMemoryDatabase
+.head 4 -  Description: This holds the memory database handle to Persons.
+
+.head 4 -  Derived From
+.head 4 -  Class Variables
+.head 4 +  Instance Variables
+.head 5 -  Number: nivDBHandle	! Memory database handle (SQLite handle)
+.head 4 +  Functions
+.head 5 +  Function: CreatePersonsDatabase
+.head 6 -  Description: Creates a fresh database in memory having the structure (a table) to hold a list of persons.
+.head 6 +  Returns
+.head 7 -  Boolean:
+.head 6 +  Parameters
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nRet
+.head 7 -  Number: nDBHandle
+.head 7 -  Boolean: bReturn
+.head 7 -  Number: nStmtPtr
+.head 7 -  Number: nDummy
+.head 7 -  String: sSQL
+.head 6 +  Actions
+.head 7 -  Call rpuError.Clear(  )
+.head 7 -  !
+.head 7 -  ! If there is already a memory database, close it to start fresh
+.head 7 +  If ClosePersonsDatabase( rpuError )
+.head 8 -  ! Create database in read/write mode.
+Use ":memory:" as filename to create it in....memory
+.head 8 -  Set nRet = SQLite_Open( scMEMORY, nDBHandle )
+.head 8 +  If nRet = SQLITE_OK AND nDBHandle > 0
+.head 9 -  ! Enable extended errors. More detailed codes will be available.
+.head 9 -  Set nRet =  SQLite_ExtendedResultCodes( nDBHandle, 1 )
+.head 9 -  !
+.head 9 -  ! Define SQL statement to create a new table. It will also COMMIT in the same statement
+.head 9 -  Set sSQL = "
+CREATE TABLE Persons
+(
+	id		INTEGER PRIMARY KEY,
+	first_name	TEXT NOT NULL,
+	last_name	TEXT NOT NULL,
+	country_id	INTEGER
+);
+COMMIT;"
+.head 9 -  !
+.head 9 -  ! Prepare (compile) the SQL statement
+.head 9 -  Set nRet = SQLite_Prepare_v2( nDBHandle, sSQL, nStmtPtr )
+.head 9 +  If nRet = SQLITE_OK 
+.head 10 -  ! Execute the statement. This is done using the step method.
+.head 10 -  Set nRet = SQLite_Step( nStmtPtr )
+.head 10 +  If nRet = SQLITE_DONE		! Done means execute was ok
+.head 11 -  ! So database and table is present. Keep the handle for future use.
+.head 11 -  Set nivDBHandle = nDBHandle
+.head 11 -  Set bReturn = TRUE
+.head 10 +  Else
+.head 11 -  ! Fetch the last error from SQLite...
+.head 11 -  Call rpuError.RetrieveError( nDBHandle )
+.head 10 -  !
+.head 10 -  ! End the prepared statement (cleans up memory)
+.head 10 -  Set nRet = SQLite_Finalize( nStmtPtr )
+.head 9 +  Else
+.head 10 -  ! Fetch the last error from SQLite...
+.head 10 -  Call rpuError.RetrieveError( nDBHandle )
+.head 8 +  Else
+.head 9 -  ! Fetch the last error from SQLite...
+.head 9 -  Call rpuError.RetrieveError( nDBHandle )
+.head 8 -  !
+.head 8 +  If bReturn
+.head 9 -  ! Well, do not close the database handle here, it will delete the database from memory.
+.head 9 -  ! So do nothing...it is ok
+.head 8 +  Else
+.head 9 -  ! Close the database connection. Must be done to cleanup
+.head 9 +  If nDBHandle > 0
+.head 10 -  Set nRet = SQLite_Close( nDBHandle )
+.head 8 -  Return bReturn
+.head 7 +  Else
+.head 8 -  Return FALSE
+.head 5 +  Function: ClosePersonsDatabase
+.head 6 -  Description: Closes the open handle to the memory database.
+When closed, the database is gone from memory.
+.head 6 +  Returns
+.head 7 -  Boolean:
+.head 6 +  Parameters
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nRet
+.head 6 +  Actions
+.head 7 -  Call rpuError.Clear(  )
+.head 7 -  !
+.head 7 +  If nivDBHandle > 0
+.head 8 -  ! Close the database connection
+.head 8 -  Set nRet = SQLite_Close( nivDBHandle )
+.head 8 +  If nRet = SQLITE_OK
+.head 9 -  ! Database is closed. It is now gone from memory
+.head 9 -  Set nivDBHandle = 0
+.head 9 -  Return TRUE
+.head 8 +  Else
+.head 9 -  ! Fetch the last error from SQLite...
+.head 9 -  Call rpuError.RetrieveError( nivDBHandle )
+.head 9 -  Return FALSE
+.head 7 +  Else
+.head 8 -  ! No database present, so it is ok
+.head 8 -  Return TRUE
+.head 5 +  Function: GetMemoryDatabase
+.head 6 -  Description: Returns the open memory database handle if there is one.
+.head 6 +  Returns
+.head 7 -  Boolean:
+.head 6 +  Parameters
+.head 7 -  Receive Number: rpnDBHandle
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 -  Local variables
+.head 6 +  Actions
+.head 7 +  If nivDBHandle > 0
+.head 8 -  Set rpnDBHandle = nivDBHandle
+.head 8 -  Return TRUE
+.head 7 +  Else
+.head 8 -  Call rpuError.SetError( -1, "Not connected to memory database." )
+.head 8 -  Return FALSE
+.head 5 +  Function: IsMemoryDatabaseCreated
+.head 6 -  Description: Checks if there is a memory database open.
+Is there a handle?
+.head 6 -  Returns
+.head 6 -  Parameters
+.head 6 -  Static Variables
+.head 6 -  Local variables
+.head 6 +  Actions
+.head 7 +  If nivDBHandle > 0
+.head 8 -  Return TRUE
+.head 7 +  Else
+.head 8 -  Return FALSE
+.head 5 +  Function: SaveMemoryDatabaseToFile
+.head 6 -  Description: This is using the backup feature of SQLite.
+It will copy the complete database from memory to a disk file.
+.head 6 -  Returns
+.head 6 +  Parameters
+.head 7 -  String: psFile
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nDBHandleDest
+.head 7 -  Number: nRet
+.head 7 -  Number: nBackupHandle
+.head 7 -  Boolean: bReturn
+.head 6 +  Actions
+.head 7 +  If IsMemoryDatabaseCreated( )
+.head 8 -  ! The backup mechanism needs two database handles, a source and a destination.
+.head 8 -  ! First open (create) the destination
+.head 8 -  Set nRet = SQLite_Open( psFile, nDBHandleDest )
+.head 8 +  If nRet = SQLITE_OK AND nDBHandleDest > 0
+.head 9 -  ! Init the backup feature. Pass in the destination and source database. The source is the memory database
+.head 9 -  Set nBackupHandle = SQLite_BackupInit( nDBHandleDest, "main", nivDBHandle, "main" )
+.head 9 +  If nBackupHandle > 0
+.head 10 -  ! Execute the backup...
+.head 10 -  Set nRet = SQLite_BackupStep( nBackupHandle, -1)
+.head 10 +  If nRet = SQLITE_DONE OR nRet = SQLITE_OK
+.head 11 -  ! The source is now fully copied to destination database
+.head 11 -  Set bReturn = TRUE
+.head 10 +  Else
+.head 11 -  Call rpuError.RetrieveError( nDBHandleDest )
+.head 10 -  ! End the backup feature
+.head 10 -  Call SQLite_BackupFinish( nBackupHandle )
+.head 9 +  Else
+.head 10 -  Call rpuError.RetrieveError( nDBHandleDest )
+.head 8 +  Else
+.head 9 -  Call rpuError.RetrieveError( nDBHandleDest )
+.head 8 -  ! Close the destination database connection. We should not close the source here becaus eit is the memory database and closing it will clear it from memory
+.head 8 +  If nDBHandleDest > 0
+.head 9 -  Set nRet = SQLite_Close( nDBHandleDest )
+.head 7 -  Return bReturn
+.head 5 +  Function: LoadMemoryDatabaseFromFile
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 +  Parameters
+.head 7 -  String: psFile
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nDBHandleSrc
+.head 7 -  Number: nDBHandleDest
+.head 7 -  Number: nRet
+.head 7 -  Number: nBackupHandle
+.head 7 -  Boolean: bReturn
+.head 6 +  Actions
+.head 7 -  ! We start over with a fresh memory database. If there is already one, close it first
+.head 7 +  If ClosePersonsDatabase( rpuError )
+.head 8 -  ! Open connection to source database which is a file on disk
+.head 8 -  Set nRet = SQLite_Open_v2( psFile, SQLITE_OPEN_READONLY, nDBHandleSrc )
+.head 8 +  If nRet = SQLITE_OK AND nDBHandleSrc > 0
+.head 9 -  ! Open (create) a new memory database
+.head 9 -  Set nRet = SQLite_Open( scMEMORY, nDBHandleDest )
+.head 9 +  If nRet = SQLITE_OK AND nDBHandleDest > 0
+.head 10 -  ! Init the backup feature. Pass in the destination and source database. The source is the file database, destination is the memory database
+.head 10 -  Set nBackupHandle = SQLite_BackupInit( nDBHandleDest, "main", nDBHandleSrc, "main" )
+.head 10 +  If nBackupHandle > 0
+.head 11 -  ! Execute the backup...
+.head 11 -  Set nRet = SQLite_BackupStep( nBackupHandle, -1)
+.head 11 +  If nRet = SQLITE_DONE OR nRet = SQLITE_OK
+.head 12 -  ! The source is now fully copied to destination database
+.head 12 -  ! Keep the memory database handle globally
+.head 12 -  Set nivDBHandle = nDBHandleDest
+.head 12 -  Set bReturn = TRUE
+.head 11 +  Else
+.head 12 -  Call rpuError.RetrieveError( nDBHandleDest )
+.head 11 -  ! End the backup feature
+.head 11 -  Call SQLite_BackupFinish(nBackupHandle)
+.head 10 +  Else
+.head 11 -  Call rpuError.RetrieveError( nDBHandleDest )
+.head 9 +  Else
+.head 10 -  Call rpuError.RetrieveError( nDBHandleDest )
+.head 8 +  Else
+.head 9 -  Call rpuError.RetrieveError( nDBHandleSrc )
+.head 8 -  ! Close the source database connection which is here the local file database
+.head 8 +  If nDBHandleSrc > 0
+.head 9 -  Set nRet = SQLite_Close( nDBHandleSrc )
+.head 8 -  !
+.head 8 -  ! Ouch. The database backup was not correct. We need to close the memory database.
+But when the backup was OK, do not close the memory database as it then would be cleared from memory. Keep it globally
+.head 8 +  If NOT bReturn AND nDBHandleDest > 0
+.head 9 -  Set nRet = SQLite_Close( nDBHandleDest )
+.head 7 -  Return bReturn
+.head 3 -  !
+.head 3 -  ! Domain layer to hold countries from local sqlite database
+.head 3 +  Functional Class: cfcCountry
+.head 4 -  Description:
+.head 4 -  Derived From
+.head 4 -  Class Variables
+.head 4 +  Instance Variables
+.head 5 -  Number: nivCountryId
+.head 5 -  String: sivCountry
+.head 5 -  String: sivFullName
+.head 5 -  String: sivAlpha2
+.head 5 -  String: sivAlpha3
+.head 5 -  String: sivLatitude
+.head 5 -  String: sivLongitude
+.head 5 -  Number: nivZoom
+.head 5 -  String: sivFlagBitmap
+.head 5 -  Number: nivFlagVTHandle
+.head 4 +  Functions
+.head 5 +  Function: LoadFlag
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 +  Parameters
+.head 7 -  Number: pnDBHandle
+.head 7 -  Number: pnSize
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nDBHandle
+.head 7 -  Boolean: bReturn
+.head 7 -  Number: nRet
+.head 7 -  Number: nStmtPtr
+.head 7 -  String: sSQL
+.head 7 -  String: sImg
+.head 7 -  String: sColumnName
+.head 6 +  Actions
+.head 7 +  If nivFlagVTHandle > 0
+.head 8 -  Return TRUE
+.head 7 +  Else
+.head 8 +  If pnDBHandle > 0
+.head 9 -  Set nDBHandle = pnDBHandle
+.head 9 -  Set nRet = SQLITE_OK
+.head 8 +  Else
+.head 9 -  Set nRet = SQLite_Open_v2( PALGetRuntimeFolder( ) || "CountryFlags.db" , SQLITE_OPEN_READONLY, nDBHandle )
+.head 8 +  If nRet = SQLITE_OK AND nDBHandle > 0
+.head 9 -  Set nRet =  SQLite_ExtendedResultCodes( nDBHandle, 1 )
+.head 9 -  Set sColumnName = "bmp" || SalNumberToStrX( pnSize, 0 )
+.head 9 -  Set sSQL = "
+SELECT	" || sColumnName || "
+FROM	flags
+WHERE	code2 = :CODE2;"
+.head 9 -  Set nRet = SQLite_Prepare_v2( nDBHandle, sSQL, nStmtPtr )
+.head 9 +  If nRet = SQLITE_OK
+.head 10 -  Call SQLite_BindText_Name( nStmtPtr, ":CODE2", sivAlpha2 )
+.head 10 +  If SQLite_Step( nStmtPtr ) = SQLITE_ROW
+.head 11 -  Set sImg		= SQLite_ColumnBlob_Name( nStmtPtr, sColumnName )
+.head 11 -  ! Call WriteToFile( sImg, nLen )
+.head 11 -  Set nivFlagVTHandle = VisPicLoad( PIC_FormatBitmap | PIC_LoadSWinStr, sImg, STRING_Null )
+.head 11 -  Set bReturn = TRUE
+.head 10 -  Set nRet = SQLite_Finalize( nStmtPtr )
+.head 10 -  If 1
+.head 9 +  Else
+.head 10 -  Call rpuError.RetrieveError( nDBHandle )
+.head 8 +  Else
+.head 9 -  Call rpuError.RetrieveError( nDBHandle )
+.head 8 -  ! Close the database connection
+.head 8 +  If NOT pnDBHandle
+.head 9 +  If nDBHandle > 0 
+.head 10 -  Set nRet = SQLite_Close( nDBHandle )
+.head 8 -  Return bReturn
+.head 5 +  Function: FreeFlagResources
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 -  Parameters
+.head 6 -  Static Variables
+.head 6 -  Local variables
+.head 6 +  Actions
+.head 7 +  If nivFlagVTHandle > 0
+.head 8 -  Call VisPicFree( nivFlagVTHandle )
+.head 8 -  Set nivFlagVTHandle = 0
+.head 8 -  Set sivFlagBitmap = STRING_Null
+.head 5 +  Function: Match
+.head 6 -  Description:
+.head 6 +  Returns
+.head 7 -  Boolean:
+.head 6 +  Parameters
+.head 7 -  String: psMatchString
+.head 6 -  Static Variables
+.head 6 -  Local variables
+.head 6 +  Actions
+.head 7 +  If psMatchString
+.head 8 +  If SalStrScan( sivCountry, psMatchString ) > -1 OR SalStrScan( sivFullName, psMatchString ) > -1 OR SalStrScan( sivAlpha2, psMatchString ) > -1 OR SalStrScan( sivAlpha3, psMatchString ) > -1
+.head 9 -  Return TRUE
+.head 8 +  Else
+.head 9 -  Return FALSE
+.head 7 +  Else
+.head 8 -  Return TRUE
+.head 5 +  ! Function: WriteToFile
+.head 6 -  Description: 
+.head 6 -  Returns 
+.head 6 +  Parameters 
+.head 7 -  String: psData
+.head 7 -  Number: pnSize
+.head 6 -  Static Variables 
+.head 6 +  Local variables 
+.head 7 -  File Handle: hFile
+.head 6 +  Actions 
+.head 7 +  If SalFileOpen( hFile, "test.bmp", OF_Create | OF_Write | OF_Binary )
+.head 8 -  Call SalFileWrite( hFile, psData, pnSize )
+.head 8 -  Call SalFileClose( hFile )
+.head 3 +  Functional Class: cfcCountryList
+.head 4 -  Description:
+.head 4 -  Derived From
+.head 4 -  Class Variables
+.head 4 +  Instance Variables
+.head 5 -  FunctionalVar: uaivCountry[*]
+.head 6 -  Class: cfcCountry
+.head 5 -  Number: nivTotalCountries
+.head 4 +  Functions
+.head 5 +  Function: Clear
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 -  Parameters
+.head 6 -  Static Variables
+.head 6 -  Local variables
+.head 6 +  Actions
+.head 7 -  Call SalArraySetUpperBound( uaivCountry, 1, -1 )
+.head 7 -  Set nivTotalCountries = 0
+.head 5 +  Function: LoadCountries
+.head 6 -  Description:
+.head 6 +  Returns
+.head 7 -  Boolean:
+.head 6 +  Parameters
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nRet
+.head 7 -  Number: nDBHandle
+.head 7 -  Number: nStmtPtr
+.head 7 -  Number: nDummy
+.head 7 -  Number: nData
+.head 7 -  String: sSQL
+.head 7 -  Boolean: bReturn
+.head 6 +  Actions
+.head 7 -  Call FreeFlagResources( )	! Be sure resources are freed
+.head 7 -  ! First clear the list and the error object
+.head 7 -  Call Clear(  )
+.head 7 -  Call rpuError.Clear(  )
+.head 7 -  !
+.head 7 -  ! Open database in read mode
+.head 7 -  Set nRet = SQLite_Open_v2( PALGetRuntimeFolder( ) || "Countries.db", SQLITE_OPEN_READONLY, nDBHandle )
+.head 7 +  If nRet = SQLITE_OK AND nDBHandle > 0
+.head 8 -  ! SQL statement to use...see that there is no INTO clause...
+.head 8 -  Set sSQL = "
+SELECT	id, country, fullname, code2, code3, latitude, longitude, zoom
+FROM	countries
+ORDER BY fullname;"
+.head 8 -  !
+.head 8 -  ! Prepare (compile) the SQL statement
+.head 8 -  Set nRet = SQLite_Prepare_v2( nDBHandle, sSQL, nStmtPtr )
+.head 8 +  If nRet = SQLITE_OK 
+.head 9 -  ! Get the rows one by one
+.head 9 +  While SQLite_Step( nStmtPtr ) = SQLITE_ROW
+.head 10 -  ! Get all values from resultset. Here using the column index (0..n)
+.head 10 -  Set uaivCountry[nivTotalCountries].nivCountryId		= SQLite_ColumnInt( nStmtPtr, 0 )
+.head 10 -  Set uaivCountry[nivTotalCountries].sivCountry		= SQLite_ColumnText( nStmtPtr, 1 )
+.head 10 -  Set uaivCountry[nivTotalCountries].sivFullName		= SQLite_ColumnText( nStmtPtr, 2 )
+.head 10 -  Set uaivCountry[nivTotalCountries].sivAlpha2		= SQLite_ColumnText( nStmtPtr, 3 )
+.head 10 -  Set uaivCountry[nivTotalCountries].sivAlpha3		= SQLite_ColumnText( nStmtPtr, 4 )
+.head 10 -  Set uaivCountry[nivTotalCountries].sivLatitude		= SQLite_ColumnText( nStmtPtr, 5 )
+.head 10 -  Set uaivCountry[nivTotalCountries].sivLongitude		= SQLite_ColumnText( nStmtPtr, 6 )
+.head 10 -  Set uaivCountry[nivTotalCountries].nivZoom		= SQLite_ColumnInt( nStmtPtr, 7 )
+.head 10 -  !
+.head 10 -  ! Another way without using column index is using the column name (an extra TD wrapper function)
+.head 10 -  ! They are here commented. Uncomment if you want to use the alternative...
+.head 10 -  !
+.head 10 -  ! Set uaivCountry[nivTotalCountries].nivCountryId		= SQLite_ColumnInt_Name( nStmtPtr, "id" )
+.head 10 -  ! Set uaivCountry[nivTotalCountries].sivCountry		= SQLite_ColumnText_Name( nStmtPtr, "country" )
+.head 10 -  ! Set uaivCountry[nivTotalCountries].sivFullName		= SQLite_ColumnText_Name( nStmtPtr, "fullname" )
+.head 10 -  ! Set uaivCountry[nivTotalCountries].sivCode2		= SQLite_ColumnText_Name( nStmtPtr, "code2" )
+.head 10 -  ! Set uaivCountry[nivTotalCountries].sivCode3		= SQLite_ColumnText_Name( nStmtPtr, "code3" )
+.head 10 -  ! Set uaivCountry[nivTotalCountries].sivLatitude		= SQLite_ColumnText_Name( nStmtPtr, "latitude" )
+.head 10 -  ! Set uaivCountry[nivTotalCountries].sivLongitude		= SQLite_ColumnText_Name( nStmtPtr, "longitude" )
+.head 10 -  ! Set uaivCountry[nivTotalCountries].nivZoom		= SQLite_ColumnInt_Name( nStmtPtr, "zoom" )
+.head 10 -  Set nivTotalCountries = nivTotalCountries + 1
+.head 9 -  !
+.head 9 -  ! End the prepared statement (cleans up memory)
+.head 9 -  Set nRet = SQLite_Finalize( nStmtPtr )
+.head 9 -  Set bReturn = TRUE
+.head 8 +  Else
+.head 9 -  Call rpuError.RetrieveError( nDBHandle )
+.head 8 -  !
+.head 7 +  Else
+.head 8 -  Call rpuError.RetrieveError( nDBHandle )
+.head 7 -  !
+.head 7 -  ! Close the database connection
+.head 7 +  If nDBHandle > 0
+.head 8 -  Set nRet = SQLite_Close( nDBHandle )
+.head 7 -  Return TRUE ! bReturn
+.head 5 +  Function: LoadFlags
+.head 6 -  Description:
+.head 6 +  Returns
+.head 7 -  Boolean:
+.head 6 +  Parameters
+.head 7 -  Boolean: pbRefresh
+.head 7 -  Number: pnSize		! 16,24,32,48,64 and 128
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nCount
+.head 7 -  Number: nDBHandle
+.head 7 -  Number: nRet
+.head 7 -  Boolean: bReturn
+.head 6 +  Actions
+.head 7 +  If pbRefresh
+.head 8 -  Call FreeFlagResources( )
+.head 7 -  Set nRet = SQLite_Open_v2( PALGetRuntimeFolder( ) || "CountryFlags.db", SQLITE_OPEN_READONLY, nDBHandle )
+.head 7 +  If nRet = SQLITE_OK AND nDBHandle > 0
+.head 8 -  Set nCount = 0
+.head 8 +  While nCount < nivTotalCountries
+.head 9 -  Call uaivCountry[nCount].LoadFlag( nDBHandle, pnSize, rpuError )
+.head 9 -  Set nCount = nCount + 1
+.head 8 -  Set bReturn = TRUE
+.head 7 +  Else
+.head 8 -  Call rpuError.RetrieveError( nDBHandle )
+.head 7 +  If nDBHandle > 0 
+.head 8 -  Set nRet = SQLite_Close( nDBHandle )
+.head 7 -  Return bReturn
+.head 5 +  Function: GetCountryOnId
+.head 6 -  Description:
+.head 6 +  Returns
+.head 7 -  Boolean:
+.head 6 +  Parameters
+.head 7 -  Number: pnCountryId
+.head 7 -  FunctionalVar: rpuCountry
+.head 8 -  Class: cfcCountry
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nCount
+.head 6 +  Actions
+.head 7 -  Set nCount = 0
+.head 7 +  While nCount < nivTotalCountries
+.head 8 +  If uaivCountry[nCount].nivCountryId = pnCountryId
+.head 9 -  Set rpuCountry = uaivCountry[nCount]
+.head 9 -  Return TRUE
+.head 8 -  Set nCount = nCount + 1
+.head 7 -  Return FALSE
+.head 5 +  Function: FreeFlagResources
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 -  Parameters
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nCount
+.head 6 +  Actions
+.head 7 -  Set nCount = 0
+.head 7 +  While nCount < nivTotalCountries
+.head 8 -  Call uaivCountry[nCount].FreeFlagResources( )
+.head 8 -  Set nCount = nCount + 1
+.head 3 -  !
+.head 3 -  ! Domain layer to hold persons from a sqlite memory database
+.head 3 +  Functional Class: cfcPerson
+.head 4 -  Description:
+.head 4 -  Derived From
+.head 4 -  Class Variables
+.head 4 +  Instance Variables
+.head 5 -  Number: nivPersonId
+.head 5 -  String: sivFirstName
+.head 5 -  String: sivLastName
+.head 5 -  Number: nivCountryId
+.head 5 -  String: sivPhoto
+.head 4 +  Functions
+.head 5 +  Function: CopyFrom
+.head 6 -  Description: Make a clone of the object
+.head 6 -  Returns
+.head 6 +  Parameters
+.head 7 -  FunctionalVar: puPerson
+.head 8 -  Class: cfcPerson
+.head 6 -  Static Variables
+.head 6 -  Local variables
+.head 6 +  Actions
+.head 7 -  Set nivPersonId = puPerson.nivPersonId
+.head 7 -  Set sivFirstName = puPerson.sivFirstName
+.head 7 -  Set sivLastName = puPerson.sivLastName
+.head 7 -  Set nivCountryId = puPerson.nivCountryId
+.head 5 +  Function: Insert
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 +  Parameters
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nRet
+.head 7 -  Number: nDBHandle
+.head 7 -  Number: nStmtPtr
+.head 7 -  Number: nDummy
+.head 7 -  String: sSQL
+.head 7 -  Boolean: bReturn
+.head 6 +  Actions
+.head 7 -  ! First clear  the error object
+.head 7 -  Call rpuError.Clear(  )
+.head 7 -  !
+.head 7 +  If guMemoryDatabase.GetMemoryDatabase( nDBHandle, rpuError )
+.head 8 -  Set nRet =  SQLite_ExtendedResultCodes( nDBHandle, 1 )
+.head 8 -  Set sSQL = "
+INSERT INTO	persons
+(
+	first_name,
+	last_name,
+	country_id
+)
+VALUES
+(
+	:FIRSTNAME,
+	:LASTNAME,
+	:COUNTRYID
+);
+COMMIT;"
+.head 8 -  !
+.head 8 -  ! Prepare (compile) the SQL statement
+.head 8 -  Set nRet = SQLite_Prepare_v2( nDBHandle, sSQL, nStmtPtr )
+.head 8 +  If nRet = SQLITE_OK 
+.head 9 -  ! Assign values to the binds
+.head 9 -  Call SQLite_BindText_Name( nStmtPtr, ":FIRSTNAME", sivFirstName )
+.head 9 -  Call SQLite_BindText_Name( nStmtPtr, ":LASTNAME", sivLastName )
+.head 9 -  Call SQLite_BindInt_Name( nStmtPtr, ":COUNTRYID", nivCountryId )
+.head 9 -  !
+.head 9 -  ! Execute the statement
+.head 9 -  Set nRet = SQLite_Step( nStmtPtr )
+.head 9 -  !
+.head 9 +  If nRet = SQLITE_DONE
+.head 10 -  Set bReturn = TRUE
+.head 9 +  Else
+.head 10 -  Call rpuError.RetrieveError( nDBHandle )
+.head 9 -  !
+.head 9 -  ! End the prepared statement (cleans up memory)
+.head 9 -  Call SQLite_ClearBindings( nStmtPtr )
+.head 9 -  Call SQLite_Finalize( nStmtPtr )
+.head 8 +  Else
+.head 9 -  Call rpuError.RetrieveError( nDBHandle )
+.head 8 -  !
+.head 7 -  !
+.head 7 -  Return bReturn
+.head 5 +  Function: Delete
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 +  Parameters
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nRet
+.head 7 -  Number: nDBHandle
+.head 7 -  Number: nStmtPtr
+.head 7 -  Number: nDummy
+.head 7 -  String: sSQL
+.head 7 -  Boolean: bReturn
+.head 6 +  Actions
+.head 7 -  ! First clear  the error object
+.head 7 -  Call rpuError.Clear(  )
+.head 7 -  !
+.head 7 +  If guMemoryDatabase.GetMemoryDatabase( nDBHandle, rpuError )
+.head 8 -  Set nRet =  SQLite_ExtendedResultCodes( nDBHandle, 1 )
+.head 8 -  Set sSQL = "
+DELETE FROM	persons
+WHERE	id = :PERSONID;
+COMMIT;"
+.head 8 -  !
+.head 8 -  ! Prepare (compile) the SQL statement
+.head 8 -  Set nRet = SQLite_Prepare_v2( nDBHandle, sSQL, nStmtPtr )
+.head 8 +  If nRet = SQLITE_OK 
+.head 9 -  ! Assign values to the binds
+.head 9 -  Call SQLite_BindInt_Name( nStmtPtr, ":PERSONID", nivPersonId )
+.head 9 -  !
+.head 9 -  ! Execute the statement
+.head 9 -  Set nRet = SQLite_Step( nStmtPtr )
+.head 9 -  !
+.head 9 +  If nRet = SQLITE_DONE
+.head 10 -  Set bReturn = TRUE
+.head 9 +  Else
+.head 10 -  Call rpuError.RetrieveError( nDBHandle )
+.head 9 -  !
+.head 9 -  ! End the prepared statement (cleans up memory)
+.head 9 -  Call SQLite_ClearBindings( nStmtPtr )
+.head 9 -  Call SQLite_Finalize( nStmtPtr )
+.head 8 +  Else
+.head 9 -  Call rpuError.RetrieveError( nDBHandle )
+.head 8 -  !
+.head 7 -  !
+.head 7 -  Return bReturn
+.head 5 +  Function: Update
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 +  Parameters
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nRet
+.head 7 -  Number: nDBHandle
+.head 7 -  Number: nStmtPtr
+.head 7 -  Number: nDummy
+.head 7 -  String: sSQL
+.head 7 -  Boolean: bReturn
+.head 6 +  Actions
+.head 7 -  ! First clear  the error object
+.head 7 -  Call rpuError.Clear(  )
+.head 7 -  !
+.head 7 -  ! Open database in read mode
+.head 7 +  If guMemoryDatabase.GetMemoryDatabase( nDBHandle, rpuError )
+.head 8 -  Set nRet =  SQLite_ExtendedResultCodes( nDBHandle, 1 )
+.head 8 -  Set sSQL = "
+UPDATE	persons
+SET 	first_name	= :FIRSTNAME,
+	last_name	= :LASTNAME,
+	country_id	= :COUNTRYID
+WHERE	id = :PERSONID;
+COMMIT;"
+.head 8 -  !
+.head 8 -  ! Prepare (compile) the SQL statement
+.head 8 -  Set nRet = SQLite_Prepare_v2( nDBHandle, sSQL, nStmtPtr )
+.head 8 +  If nRet = SQLITE_OK 
+.head 9 -  ! Assign values to the binds
+.head 9 -  Call SQLite_BindText_Name( nStmtPtr, ":FIRSTNAME", sivFirstName )
+.head 9 -  Call SQLite_BindText_Name( nStmtPtr, ":LASTNAME", sivLastName )
+.head 9 -  Call SQLite_BindInt_Name( nStmtPtr, ":COUNTRYID" , nivCountryId )
+.head 9 -  Call SQLite_BindInt_Name( nStmtPtr, ":PERSONID", nivPersonId )
+.head 9 -  !
+.head 9 -  ! Execute the statement
+.head 9 -  Set nRet = SQLite_Step( nStmtPtr )
+.head 9 -  !
+.head 9 +  If nRet = SQLITE_DONE
+.head 10 -  Set bReturn = TRUE
+.head 9 +  Else
+.head 10 -  Call rpuError.RetrieveError( nDBHandle )
+.head 9 -  !
+.head 9 -  ! End the prepared statement (cleans up memory)
+.head 9 -  Call SQLite_ClearBindings( nStmtPtr )
+.head 9 -  Call SQLite_Finalize( nStmtPtr )
+.head 8 +  Else
+.head 9 -  Call rpuError.RetrieveError( nDBHandle )
+.head 8 -  !
+.head 7 -  !
+.head 7 -  Return bReturn
+.head 3 +  Functional Class: cfcPersonList
+.head 4 -  Description:
+.head 4 -  Derived From
+.head 4 -  Class Variables
+.head 4 +  Instance Variables
+.head 5 -  FunctionalVar: uaivPerson[*]
+.head 6 -  Class: cfcPerson
+.head 5 -  Number: nivTotalPersons
+.head 4 +  Functions
+.head 5 +  Function: Clear
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 -  Parameters
+.head 6 -  Static Variables
+.head 6 -  Local variables
+.head 6 +  Actions
+.head 7 -  Call SalArraySetUpperBound( uaivPerson, 1, -1 )
+.head 7 -  Set nivTotalPersons = 0
+.head 5 +  Function: LoadPersons
+.head 6 -  Description:
+.head 6 +  Returns
+.head 7 -  Boolean:
+.head 6 +  Parameters
+.head 7 -  FunctionalVar: rpuError
+.head 8 -  Class: cfcSQLiteError
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nRet
+.head 7 -  Number: nDBHandle
+.head 7 -  Number: nStmtPtr
+.head 7 -  Number: nDummy
+.head 7 -  String: sSQL
+.head 7 -  String: sErrMsg
+.head 7 -  Boolean: bReturn
+.head 6 +  Actions
+.head 7 -  Call Clear(  )
+.head 7 -  Call rpuError.Clear(  )
+.head 7 +  If guMemoryDatabase.GetMemoryDatabase( nDBHandle, rpuError )
+.head 8 -  ! We can use the column names in the statement, but...
+.head 8 -  ! Set sSQL = "
+SELECT	id, first_name, last_name, country_id
+FROM	persons
+ORDER BY id;"
+.head 8 -  !
+.head 8 -  ! We can also use * to get all columns and get the data we need...
+.head 8 -  Set sSQL = "
+SELECT	*
+FROM	persons
+ORDER BY id;"
+.head 8 -  Set nRet = SQLite_Prepare_v2( nDBHandle, sSQL, nStmtPtr )
+.head 8 +  If nRet = SQLITE_OK 
+.head 9 +  While SQLite_Step( nStmtPtr ) = SQLITE_ROW
+.head 10 -  Set uaivPerson[nivTotalPersons].nivPersonId	= SQLite_ColumnInt_Name( nStmtPtr, "id" )
+.head 10 -  Set uaivPerson[nivTotalPersons].sivFirstName	= SQLite_ColumnText_Name( nStmtPtr, "first_name" )
+.head 10 -  Set uaivPerson[nivTotalPersons].sivLastName	= SQLite_ColumnText_Name( nStmtPtr, "last_name" )
+.head 10 -  Set uaivPerson[nivTotalPersons].nivCountryId	= SQLite_ColumnInt_Name( nStmtPtr, "country_id" )
+.head 10 -  Set nivTotalPersons = nivTotalPersons + 1
+.head 9 -  Set nRet = SQLite_Finalize( nStmtPtr )
+.head 9 -  Set bReturn = TRUE
+.head 8 +  Else
+.head 9 -  Call rpuError.RetrieveError( nDBHandle )
+.head 8 -  !
+.head 8 -  Return bReturn
+.head 7 +  Else
+.head 8 -  Return FALSE
+.head 5 +  Function: GetPersonOnId
+.head 6 -  Description:
+.head 6 +  Returns
+.head 7 -  Boolean:
+.head 6 +  Parameters
+.head 7 -  Number: pnPersonId
+.head 7 -  FunctionalVar: rpuPerson
+.head 8 -  Class: cfcPerson
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nCount
+.head 6 +  Actions
+.head 7 -  Set nCount = 0
+.head 7 +  While nCount < nivTotalPersons
+.head 8 +  If uaivPerson[nCount].nivPersonId = pnPersonId
+.head 9 -  Set rpuPerson = uaivPerson[nCount]
+.head 9 -  Return TRUE
+.head 8 -  Set nCount = nCount + 1
+.head 7 -  Return FALSE
+.head 2 +  Default Classes
+.head 3 -  MDI Window: cBaseMDI
+.head 3 -  Form Window:
+.head 3 -  Dialog Box:
+.head 3 -  Table Window:
+.head 3 -  Quest Window:
+.head 3 -  Data Field:
+.head 3 -  Spin Field:
+.head 3 -  Multiline Field:
+.head 3 -  Pushbutton:
+.head 3 -  Radio Button:
+.head 3 -  Option Button:
+.head 3 -  Check Box:
+.head 3 -  Child Table:
+.head 3 -  Quest Child Window: cQuickDatabase
+.head 3 -  List Box:
+.head 3 -  Combo Box:
+.head 3 -  Picture:
+.head 3 -  Vertical Scroll Bar:
+.head 3 -  Horizontal Scroll Bar:
+.head 3 -  Column:
+.head 3 -  Background Text:
+.head 3 -  Group Box:
+.head 3 -  Line:
+.head 3 -  Frame:
+.head 3 -  Custom Control:
+.head 3 -  ActiveX: AX_SHDocVw_WebBrowser
+.head 3 -  ! Date Picker:
+.head 3 -  ! Date Time Picker:
+.head 3 -  ! Child Grid:
+.head 3 -  ! Tab Bar:
+.head 3 -  ! Grid Window:
+.head 3 -  ! Child Grid:
+.head 3 -  ! Rich Text Control:
+.head 3 -  ! Separator:
+.head 3 -  ! Tree Control:
+.head 3 -  ! Navigation Bar:
+.head 3 -  ! Pane Separator:
+.head 3 -  ! Progress Bar:
+.head 3 -  ! Date Picker:
+.head 3 -  ! Date Time Picker:
+.head 3 -  ! Tab Bar:
+.head 2 +  Application Actions
+.head 3 +  On SAM_AppStartup
+.head 4 -  Call SalModalDialog( dlgPersons, hWndNULL )
+.head 1 -  !
+.head 1 +  ! Versions.....>>>>
+.head 2 +  Version 1.0.0	19-12-2018	Dave Rabelink
+.head 3 -  - Initial version
+.head 1 -  !
+.head 1 +  Dialog Box: dlgPersons		! Main screen having list with persons in memory database
+.head 2 -  Class:
+.head 2 -  Property Template:
+.head 2 -  Class DLL Name:
+.head 2 -  Title: Persons database (in memory)
+.head 2 -  Accessories Enabled? No
+.head 2 -  Visible? Yes
+.head 2 -  Display Settings
+.head 3 -  Display Style? Default
+.head 3 -  Visible at Design time? No
+.head 3 -  Type of Dialog: Modal
+.head 3 -  Window Location and Size
+.head 4 -  Left: 0.625"
+.head 4 -  Top: 0.625"
+.head 4 -  Width:  9.757"
+.head 4 -  Width Editable? Yes
+.head 4 -  Height: 5.094"
+.head 4 -  Height Editable? Yes
+.head 3 -  Absolute Screen Location? Yes
+.head 3 -  Font Name: Default
+.head 3 -  Font Size: Default
+.head 3 -  Font Enhancement: Default
+.head 3 -  Text Color: Default
+.head 3 -  Background Color: Default
+.head 2 -  Description:
+.head 2 +  Tool Bar
+.head 3 -  Display Settings
+.head 4 -  Display Style? Default
+.head 4 -  Location? Top
+.head 4 -  Visible? Yes
+.head 4 -  Size: Default
+.head 4 -  Size Editable? Yes
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 3 -  Contents
+.head 2 +  Contents
+.head 3 +  Pushbutton: pbSQLiteSite
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: SQLite info
+.head 4 -  Window Location and Size
+.head 5 -  Left: 0.117"
+.head 5 -  Top: 0.042"
+.head 5 -  Width:  1.4"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.229"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call ShowSQLiteWebsite( )
+.head 4 -  ! Button Appearance: Standard
+.head 3 +  Data Field: dfVersionInfo
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Data
+.head 5 -  Maximum Data Length: Default
+.head 5 -  Data Type: String
+.head 5 -  Editable? Yes
+.head 4 -  Display Settings
+.head 5 -  Window Location and Size
+.head 6 -  Left: 1.6"
+.head 6 -  Top: 0.073"
+.head 6 -  Width:  5.467"
+.head 6 -  Width Editable? Yes
+.head 6 -  Height: 0.219"
+.head 6 -  Height Editable? Yes
+.head 5 -  Visible? Yes
+.head 5 -  Border? No
+.head 5 -  Justify: Left
+.head 5 -  Format: Unformatted
+.head 5 -  Country: Default
+.head 5 -  Font Name: Default
+.head 5 -  Font Size: Default
+.head 5 -  Font Enhancement: Bold
+.head 5 -  Text Color: Default
+.head 5 -  Background Color: 3D Face Color
+.head 5 -  Input Mask: Unformatted
+.head 4 +  Message Actions
+.head 5 +  On SAM_Create
+.head 6 -  Call SalDisableWindow( hWndItem )
+.head 3 -  !
+.head 3 +  Child Table: tblPersons
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Display Settings
+.head 5 -  Window Location and Size
+.head 6 -  Left: 0.117"
+.head 6 -  Top: 0.313"
+.head 6 -  Width:  7.943"
+.head 6 -  Width Editable? Yes
+.head 6 -  Height: 3.969"
+.head 6 -  Height Editable? Yes
+.head 5 -  Visible? Yes
+.head 5 -  Font Name: Default
+.head 5 -  Font Size: Default
+.head 5 -  Font Enhancement: Default
+.head 5 -  Text Color: Default
+.head 5 -  Background Color: Default
+.head 5 -  View: Table
+.head 5 -  Allow Row Sizing? No
+.head 5 -  Lines Per Row: Default
+.head 4 -  Memory Settings
+.head 5 -  Maximum Rows in Memory: Default
+.head 5 -  Discardable? No
+.head 4 +  Contents
+.head 5 +  Column: colID
+.head 6 -  Class Child Ref Key: 0
+.head 6 -  Class ChildKey: 0
+.head 6 -  Class:
+.head 6 -  Property Template:
+.head 6 -  Class DLL Name:
+.head 6 -  Title: ID
+.head 6 -  Visible? Yes
+.head 6 -  Editable? No
+.head 6 -  Maximum Data Length: Default
+.head 6 -  Data Type: Number
+.head 6 -  Justify: Left
+.head 6 -  Width:  0.783"
+.head 6 -  Width Editable? Yes
+.head 6 -  Format: Unformatted
+.head 6 -  Country: Default
+.head 6 -  Input Mask: Unformatted
+.head 6 -  Cell Options
+.head 7 -  Cell Type? Standard
+.head 7 -  Multiline Cell? No
+.head 7 -  Cell DropDownList
+.head 8 -  Sorted? Yes
+.head 8 -  Vertical Scroll? Yes
+.head 8 -  Auto Drop Down? No
+.head 8 -  Allow Text Editing? Yes
+.head 7 -  Cell CheckBox
+.head 8 -  Check Value:
+.head 8 -  Uncheck Value:
+.head 8 -  Ignore Case? Yes
+.head 6 -  List Values
+.head 6 -  Message Actions
+.head 5 +  Column: colFirstName
+.head 6 -  Class Child Ref Key: 0
+.head 6 -  Class ChildKey: 0
+.head 6 -  Class:
+.head 6 -  Property Template:
+.head 6 -  Class DLL Name:
+.head 6 -  Title: First name
+.head 6 -  Visible? Yes
+.head 6 -  Editable? No
+.head 6 -  Maximum Data Length: Default
+.head 6 -  Data Type: String
+.head 6 -  Justify: Left
+.head 6 -  Width:  1.733"
+.head 6 -  Width Editable? Yes
+.head 6 -  Format: Unformatted
+.head 6 -  Country: Default
+.head 6 -  Input Mask: Unformatted
+.head 6 -  Cell Options
+.head 7 -  Cell Type? Standard
+.head 7 -  Multiline Cell? No
+.head 7 -  Cell DropDownList
+.head 8 -  Sorted? Yes
+.head 8 -  Vertical Scroll? Yes
+.head 8 -  Auto Drop Down? No
+.head 8 -  Allow Text Editing? Yes
+.head 7 -  Cell CheckBox
+.head 8 -  Check Value:
+.head 8 -  Uncheck Value:
+.head 8 -  Ignore Case? Yes
+.head 6 -  List Values
+.head 6 -  Message Actions
+.head 5 +  Column: colLastName
+.head 6 -  Class Child Ref Key: 0
+.head 6 -  Class ChildKey: 0
+.head 6 -  Class:
+.head 6 -  Property Template:
+.head 6 -  Class DLL Name:
+.head 6 -  Title: Last name
+.head 6 -  Visible? Yes
+.head 6 -  Editable? No
+.head 6 -  Maximum Data Length: Default
+.head 6 -  Data Type: String
+.head 6 -  Justify: Left
+.head 6 -  Width:  2.017"
+.head 6 -  Width Editable? Yes
+.head 6 -  Format: Unformatted
+.head 6 -  Country: Default
+.head 6 -  Input Mask: Unformatted
+.head 6 -  Cell Options
+.head 7 -  Cell Type? Standard
+.head 7 -  Multiline Cell? No
+.head 7 -  Cell DropDownList
+.head 8 -  Sorted? Yes
+.head 8 -  Vertical Scroll? Yes
+.head 8 -  Auto Drop Down? No
+.head 8 -  Allow Text Editing? Yes
+.head 7 -  Cell CheckBox
+.head 8 -  Check Value:
+.head 8 -  Uncheck Value:
+.head 8 -  Ignore Case? Yes
+.head 6 -  List Values
+.head 6 -  Message Actions
+.head 5 +  Column: colCountry
+.head 6 -  Class Child Ref Key: 0
+.head 6 -  Class ChildKey: 0
+.head 6 -  Class:
+.head 6 -  Property Template:
+.head 6 -  Class DLL Name:
+.head 6 -  Title: Country
+.head 6 -  Visible? Yes
+.head 6 -  Editable? No
+.head 6 -  Maximum Data Length: Default
+.head 6 -  Data Type: String
+.head 6 -  Justify: Left
+.head 6 -  Width:  3.2"
+.head 6 -  Width Editable? Yes
+.head 6 -  Format: Unformatted
+.head 6 -  Country: Default
+.head 6 -  Input Mask: Unformatted
+.head 6 -  Cell Options
+.head 7 -  Cell Type? Standard
+.head 7 -  Multiline Cell? No
+.head 7 -  Cell DropDownList
+.head 8 -  Sorted? Yes
+.head 8 -  Vertical Scroll? Yes
+.head 8 -  Auto Drop Down? No
+.head 8 -  Allow Text Editing? Yes
+.head 7 -  Cell CheckBox
+.head 8 -  Check Value:
+.head 8 -  Uncheck Value:
+.head 8 -  Ignore Case? Yes
+.head 6 -  List Values
+.head 6 -  Message Actions
+.head 4 +  Functions
+.head 5 +  Function: PopulatePersons
+.head 6 -  Description:
+.head 6 -  Returns
+.head 6 +  Parameters
+.head 7 -  FunctionalVar: puPersons
+.head 8 -  Class: cfcPersonList
+.head 6 -  Static Variables
+.head 6 +  Local variables
+.head 7 -  Number: nCount
+.head 7 -  Number: nRow
+.head 7 -  FunctionalVar: uCountry
+.head 8 -  Class: cfcCountry
+.head 6 +  Actions
+.head 7 -  Call SalTblReset( hWndForm )
+.head 7 -  Set nCount = 0
+.head 7 +  While nCount < puPersons.nivTotalPersons
+.head 8 -  Set nRow = SalTblInsertRow( hWndForm, TBL_MaxRow )
+.head 8 -  Call SalTblSetContext( hWndForm, nRow )
+.head 8 -  Set colID		= puPersons.uaivPerson[nCount].nivPersonId
+.head 8 -  Set colFirstName	= puPersons.uaivPerson[nCount].sivFirstName
+.head 8 -  Set colLastName	= puPersons.uaivPerson[nCount].sivLastName
+.head 8 -  !
+.head 8 +  If wuCountries.GetCountryOnId( puPersons.uaivPerson[nCount].nivCountryId, uCountry )
+.head 9 -  Set colCountry = uCountry.sivCountry
+.head 8 +  Else
+.head 9 -  Set colCountry = STRING_Null
+.head 8 -  Set nCount = nCount + 1
+.head 4 -  Window Variables
+.head 4 +  Message Actions
+.head 5 +  On SAM_Create
+.head 6 -  ! Remove table header
+.head 6 -  Call SalTblDefineRowHeader( hWndForm, "", 0, 0, hWndNULL )
+.head 5 +  On SAM_Click
+.head 6 -  Call ManageGUI( )
+.head 3 -  !
+.head 3 +  Pushbutton: pbSaveToFile
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: Save to file
+.head 4 -  Window Location and Size
+.head 5 -  Left: 2.0"
+.head 5 -  Top: 4.313"
+.head 5 -  Width:  1.75"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.298"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call SaveToFile( )
+.head 4 -  ! Button Appearance: Standard
+.head 3 +  Pushbutton: pbLoadFromFile
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: Load from file
+.head 4 -  Window Location and Size
+.head 5 -  Left: 0.129"
+.head 5 -  Top: 4.313"
+.head 5 -  Width:  1.75"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.298"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call LoadFromFile( )
+.head 4 -  ! Button Appearance: Standard
+.head 3 -  !
+.head 3 +  Pushbutton: pbNew
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: New
+.head 4 -  Window Location and Size
+.head 5 -  Left: 8.183"
+.head 5 -  Top: 0.323"
+.head 5 -  Width:  1.2"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.298"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call NewPerson( )
+.head 4 -  ! Button Appearance: Standard
+.head 3 +  Pushbutton: pbEdit
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: Edit
+.head 4 -  Window Location and Size
+.head 5 -  Left: 8.183"
+.head 5 -  Top: 0.677"
+.head 5 -  Width:  1.2"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.298"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call EditPerson( tblPersons.colID)
+.head 4 -  ! Button Appearance: Standard
+.head 3 +  Pushbutton: pbDelete
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: Delete
+.head 4 -  Window Location and Size
+.head 5 -  Left: 8.183"
+.head 5 -  Top: 1.031"
+.head 5 -  Width:  1.2"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.298"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call DeletePerson( tblPersons.colID)
+.head 4 -  ! Button Appearance: Standard
+.head 3 -  !
+.head 3 +  Pushbutton: pbCountries
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: Countries
+.head 4 -  Window Location and Size
+.head 5 -  Left: 8.183"
+.head 5 -  Top: 3.979"
+.head 5 -  Width:  1.2"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.298"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call SalModalDialog( dlgCountries, hWndForm, wuCountries )
+.head 4 -  ! Button Appearance: Standard
+.head 2 +  Functions
+.head 3 +  Function: InitDialog
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uError
+.head 6 -  Class: cfcSQLiteError
+.head 4 +  Actions
+.head 5 -  Set dfVersionInfo = "SQLite3 version " || SQLite_LibVersion( )
+.head 5 -  ! Be sure a memory database is present for persons...
+.head 5 +  If guMemoryDatabase.CreatePersonsDatabase( uError )
+.head 6 -  Call SalMessageBox( "Memory database created & connected.
+
+Persons database is empty and now ready to be used.", "Info", MB_Ok | MB_IconAsterisk )
+.head 5 +  Else
+.head 6 -  ! sqlite error? Display it
+.head 6 -  Call uError.DisplayError(  )
+.head 6 -  !
+.head 5 -  !
+.head 5 -  ! Get all countries from local database Countries.db
+.head 5 +  If wuCountries.LoadCountries( uError )
+.head 6 -  Call SalMessageBox( "Countries are loaded from database Countries.db", "Info", MB_Ok | MB_IconAsterisk )
+.head 6 -  Call RefreshPersons( )
+.head 5 +  Else
+.head 6 -  Call uError.DisplayError(  )
+.head 5 -  !
+.head 5 -  Call SalSetFocus( pbNew )
+.head 5 -  Call ManageGUI( )
+.head 3 +  Function: RefreshPersons
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uError
+.head 6 -  Class: cfcSQLiteError
+.head 4 +  Actions
+.head 5 -  ! Reload all persons from the memory database
+.head 5 +  If wuPersons.LoadPersons( uError )
+.head 6 -  Call tblPersons.PopulatePersons( wuPersons )
+.head 5 +  Else
+.head 6 -  Call uError.DisplayError(  )
+.head 5 -  Call ManageGUI( )
+.head 3 +  Function: NewPerson
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uNewPerson
+.head 6 -  Class: cfcPerson
+.head 4 +  Actions
+.head 5 +  If SalModalDialog( dlgPerson, hWndForm, uNewPerson, wuCountries, FALSE )
+.head 6 -  Call RefreshPersons( )
+.head 3 +  Function: EditPerson
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 +  Parameters
+.head 5 -  Number: pnPersonId
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uEditPerson
+.head 6 -  Class: cfcPerson
+.head 4 +  Actions
+.head 5 +  If wuPersons.GetPersonOnId( pnPersonId, uEditPerson )
+.head 6 +  If SalModalDialog( dlgPerson, hWndForm, uEditPerson, wuCountries, TRUE )
+.head 7 -  Call RefreshPersons( )
+.head 3 +  Function: DeletePerson
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 +  Parameters
+.head 5 -  Number: pnPersonId
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uDeletePerson
+.head 6 -  Class: cfcPerson
+.head 5 -  FunctionalVar: uError
+.head 6 -  Class: cfcSQLiteError
+.head 4 +  Actions
+.head 5 +  If wuPersons.GetPersonOnId( pnPersonId, uDeletePerson )
+.head 6 +  If uDeletePerson.Delete( uError )
+.head 7 -  Call RefreshPersons( )
+.head 6 +  Else
+.head 7 -  Call uError.DisplayError(  )
+.head 3 +  Function: SaveToFile
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uError
+.head 6 -  Class: cfcSQLiteError
+.head 4 +  Actions
+.head 5 -  ! Save (backup) the memory database to a local file
+.head 5 +  If guMemoryDatabase.SaveMemoryDatabaseToFile( PALGetRuntimeFolder( ) || "MyPersonsDatabase.db", uError )
+.head 6 -  Call SalMessageBox( "Memory database is saved to local file database:
+
+" || PALGetRuntimeFolder( ) || "MyPersonsDatabase.db", "Info", MB_Ok | MB_IconAsterisk )
+.head 5 +  Else
+.head 6 -  Call uError.DisplayError(  )
+.head 3 +  Function: LoadFromFile
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uError
+.head 6 -  Class: cfcSQLiteError
+.head 4 +  Actions
+.head 5 -  ! Load persons from a local file database and copy it to memory
+.head 5 +  If guMemoryDatabase.LoadMemoryDatabaseFromFile( PALGetRuntimeFolder( ) || "MyPersonsDatabase.db", uError )
+.head 6 -  Call RefreshPersons( )
+.head 6 -  Call SalMessageBox( "Local file database is loaded into memory:
+
+" || PALGetRuntimeFolder( ) || "MyPersonsDatabase.db", "Info", MB_Ok | MB_IconAsterisk )
+.head 5 +  Else
+.head 6 -  Call uError.DisplayError(  )
+.head 3 +  Function: ShowSQLiteWebsite
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  String: sUrl
+.head 4 +  Actions
+.head 5 -  Set sUrl = "https://www.sqlite.org/index.html"
+.head 5 -  Call ShellExecuteA( hWndNULL, "open", sUrl, STRING_Null, STRING_Null, 1)
+.head 3 +  Function: ManageGUI
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  Number: nRow
+.head 5 -  Window Handle: hWndColumn
+.head 5 -  Boolean: bMemoryDatabaseExists
+.head 4 +  Actions
+.head 5 +  If guMemoryDatabase.IsMemoryDatabaseCreated( )
+.head 6 -  Call SalEnableWindow( pbNew )
+.head 6 -  Call SalEnableWindow( pbSaveToFile )
+.head 6 -  Call SalEnableWindow( pbLoadFromFile )
+.head 5 +  Else
+.head 6 -  Call SalDisableWindow( pbNew )
+.head 6 -  Call SalDisableWindow( pbSaveToFile )
+.head 6 -  Call SalDisableWindow( pbLoadFromFile )
+.head 5 -  Set nRow = -1
+.head 5 +  If SalTblFindNextRow( tblPersons, nRow, ROW_Selected, 0 ) AND nRow > -1 AND nRow != TBL_Error
+.head 6 -  Call SalEnableWindow( pbEdit )
+.head 6 -  Call SalEnableWindow( pbDelete )
+.head 5 +  Else
+.head 6 -  Call SalDisableWindow( pbEdit )
+.head 6 -  Call SalDisableWindow( pbDelete )
+.head 3 +  Function: OnClose
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uError
+.head 6 -  Class: cfcSQLiteError
+.head 4 +  Actions
+.head 5 -  ! Just cleanup the persons database and free up the memory
+.head 5 +  If NOT guMemoryDatabase.ClosePersonsDatabase( uError )
+.head 6 -  Call uError.DisplayError(  )
+.head 5 -  !
+.head 5 -  ! Free all VT image handles when loaded
+.head 5 -  Call wuCountries.FreeFlagResources(  )
+.head 2 -  Window Parameters
+.head 2 +  Window Variables
+.head 3 -  FunctionalVar: wuPersons
+.head 4 -  Class: cfcPersonList
+.head 3 -  FunctionalVar: wuCountries
+.head 4 -  Class: cfcCountryList
+.head 2 +  Message Actions
+.head 3 +  On SAM_CreateComplete
+.head 4 -  Call InitDialog( )
+.head 3 +  On SAM_Close
+.head 4 -  Call OnClose( )
+.head 1 +  Dialog Box: dlgPerson		! Editor of adding/editing a person
+.head 2 -  Class:
+.head 2 -  Property Template:
+.head 2 -  Class DLL Name:
+.head 2 -  Title: DYNAMIC
+.head 2 -  Accessories Enabled? No
+.head 2 -  Visible? Yes
+.head 2 -  Display Settings
+.head 3 -  Display Style? Default
+.head 3 -  Visible at Design time? Yes
+.head 3 -  Type of Dialog: Modal
+.head 3 -  Window Location and Size
+.head 4 -  Left: 2.888"
+.head 4 -  Top: 1.208"
+.head 4 -  Width:  5.514"
+.head 4 -  Width Editable? Yes
+.head 4 -  Height: 2.781"
+.head 4 -  Height Editable? Yes
+.head 3 -  Absolute Screen Location? Yes
+.head 3 -  Font Name: Default
+.head 3 -  Font Size: Default
+.head 3 -  Font Enhancement: Default
+.head 3 -  Text Color: Default
+.head 3 -  Background Color: Default
+.head 2 -  Description:
+.head 2 +  Tool Bar
+.head 3 -  Display Settings
+.head 4 -  Display Style? Default
+.head 4 -  Location? Top
+.head 4 -  Visible? Yes
+.head 4 -  Size: Default
+.head 4 -  Size Editable? Yes
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 3 -  Contents
+.head 2 +  Contents
+.head 3 -  Background Text: Person id:
+.head 4 -  Resource Id: 40825
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Window Location and Size
+.head 5 -  Left: 0.329"
+.head 5 -  Top: 0.281"
+.head 5 -  Width:  1.171"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.167"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Justify: Right
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 3 +  Data Field: dfPersonId
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Data
+.head 5 -  Maximum Data Length: Default
+.head 5 -  Data Type: Number
+.head 5 -  Editable? No
+.head 4 -  Display Settings
+.head 5 -  Window Location and Size
+.head 6 -  Left: 1.586"
+.head 6 -  Top: 0.25"
+.head 6 -  Width:  0.729"
+.head 6 -  Width Editable? Yes
+.head 6 -  Height: 0.25"
+.head 6 -  Height Editable? Yes
+.head 5 -  Visible? Yes
+.head 5 -  Border? Yes
+.head 5 -  Justify: Left
+.head 5 -  Format: Unformatted
+.head 5 -  Country: Default
+.head 5 -  Font Name: Default
+.head 5 -  Font Size: Default
+.head 5 -  Font Enhancement: Default
+.head 5 -  Text Color: Default
+.head 5 -  Background Color: Default
+.head 5 -  Input Mask: Unformatted
+.head 4 -  Message Actions
+.head 3 -  Background Text: First name:
+.head 4 -  Resource Id: 40826
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Window Location and Size
+.head 5 -  Left: 0.329"
+.head 5 -  Top: 0.625"
+.head 5 -  Width:  1.171"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.167"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Justify: Right
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 3 +  Data Field: dfFirstName
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Data
+.head 5 -  Maximum Data Length: Default
+.head 5 -  Data Type: String
+.head 5 -  Editable? Yes
+.head 4 -  Display Settings
+.head 5 -  Window Location and Size
+.head 6 -  Left: 1.586"
+.head 6 -  Top: 0.604"
+.head 6 -  Width:  3.6"
+.head 6 -  Width Editable? Yes
+.head 6 -  Height: 0.25"
+.head 6 -  Height Editable? Yes
+.head 5 -  Visible? Yes
+.head 5 -  Border? Yes
+.head 5 -  Justify: Left
+.head 5 -  Format: Unformatted
+.head 5 -  Country: Default
+.head 5 -  Font Name: Default
+.head 5 -  Font Size: Default
+.head 5 -  Font Enhancement: Default
+.head 5 -  Text Color: Default
+.head 5 -  Background Color: Default
+.head 5 -  Input Mask: Unformatted
+.head 4 +  Message Actions
+.head 5 +  On SAM_AnyEdit
+.head 6 -  Call ManageGUI(  )
+.head 3 -  Background Text: Last name:
+.head 4 -  Resource Id: 40827
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Window Location and Size
+.head 5 -  Left: 0.329"
+.head 5 -  Top: 0.979"
+.head 5 -  Width:  1.171"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.167"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Justify: Right
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 3 +  Data Field: dfLastName
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Data
+.head 5 -  Maximum Data Length: Default
+.head 5 -  Data Type: String
+.head 5 -  Editable? Yes
+.head 4 -  Display Settings
+.head 5 -  Window Location and Size
+.head 6 -  Left: 1.586"
+.head 6 -  Top: 0.958"
+.head 6 -  Width:  3.6"
+.head 6 -  Width Editable? Yes
+.head 6 -  Height: 0.25"
+.head 6 -  Height Editable? Yes
+.head 5 -  Visible? Yes
+.head 5 -  Border? Yes
+.head 5 -  Justify: Left
+.head 5 -  Format: Unformatted
+.head 5 -  Country: Default
+.head 5 -  Font Name: Default
+.head 5 -  Font Size: Default
+.head 5 -  Font Enhancement: Default
+.head 5 -  Text Color: Default
+.head 5 -  Background Color: Default
+.head 5 -  Input Mask: Unformatted
+.head 4 +  Message Actions
+.head 5 +  On SAM_AnyEdit
+.head 6 -  Call ManageGUI(  )
+.head 3 -  Background Text: Country:
+.head 4 -  Resource Id: 40828
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Window Location and Size
+.head 5 -  Left: 0.317"
+.head 5 -  Top: 1.333"
+.head 5 -  Width:  1.171"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.167"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Justify: Right
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 3 +  Combo Box: cmbCountry
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Window Location and Size
+.head 5 -  Left: 1.6"
+.head 5 -  Top: 1.313"
+.head 5 -  Width:  3.6"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 1.438"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Editable? No
+.head 4 -  String Type: String
+.head 4 -  Maximum Data Length: Default
+.head 4 -  Sorted? Yes
+.head 4 -  Always Show List? No
+.head 4 -  Vertical Scroll? Yes
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 -  Input Mask: Unformatted
+.head 4 -  List Initialization
+.head 4 +  Message Actions
+.head 5 +  On SAM_AnyEdit
+.head 6 -  Call ManageGUI(  )
+.head 5 +  On SAM_Click
+.head 6 -  Call ManageGUI(  )
+.head 3 +  Pushbutton: pbOK
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: &OK
+.head 4 -  Window Location and Size
+.head 5 -  Left: 2.629"
+.head 5 -  Top: 1.948"
+.head 5 -  Width:  1.2"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.298"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Create
+.head 6 -  Call SalDisableWindow( hWndItem )
+.head 5 +  On SAM_Click
+.head 6 +  If ApplyChanges(  )
+.head 7 -  Call SalEndDialog( hWndForm, TRUE )
+.head 3 +  Pushbutton: pbCancel
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: &Cancel
+.head 4 -  Window Location and Size
+.head 5 -  Left: 4.0"
+.head 5 -  Top: 1.938"
+.head 5 -  Width:  1.2"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.298"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call SalEndDialog( hWndForm, FALSE )
+.head 2 +  Functions
+.head 3 +  Function: Init
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 -  Local variables
+.head 4 +  Actions
+.head 5 -  Call PopulateCountries( )
+.head 5 -  !
+.head 5 +  If wpbEdit
+.head 6 -  Call SalSetWindowText( hWndForm, "Edit person : " || wpuPerson.sivFirstName || " " || wpuPerson.sivLastName )
+.head 6 -  Call PopulatePerson( )
+.head 5 +  Else
+.head 6 -  Call SalSetWindowText( hWndForm, "Add new person" )
+.head 5 -  !
+.head 5 -  Call SalSetFocus( dfFirstName )
+.head 3 +  Function: PopulatePerson
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  Number: nIndex
+.head 4 +  Actions
+.head 5 -  Set dfPersonId = wpuPerson.nivPersonId
+.head 5 -  Set dfFirstName = wpuPerson.sivFirstName
+.head 5 -  Set dfLastName = wpuPerson.sivLastName
+.head 5 -  Set nIndex = VisListFindValue( cmbCountry, -1, wpuPerson.nivCountryId )
+.head 5 -  Call SalListSetSelect( cmbCountry, nIndex )
+.head 3 +  Function: PopulateCountries
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  Number: nCount
+.head 4 +  Actions
+.head 5 -  Call SalListClear( cmbCountry )
+.head 5 -  Set nCount = 0
+.head 5 +  While nCount < wpuCountries.nivTotalCountries
+.head 6 -  Call VisListAddValue( cmbCountry, wpuCountries.uaivCountry[nCount].sivCountry, wpuCountries.uaivCountry[nCount].nivCountryId )
+.head 6 -  Set nCount = nCount + 1
+.head 3 +  Function: ManageGUI
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 -  Local variables
+.head 4 +  Actions
+.head 5 +  If dfFirstName AND dfLastName
+.head 6 -  Call SalEnableWindow( pbOK )
+.head 5 +  Else
+.head 6 -  Call SalDisableWindow( pbOK )
+.head 3 +  Function: ApplyChanges
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uPerson
+.head 6 -  Class: cfcPerson
+.head 5 -  FunctionalVar: uError
+.head 6 -  Class: cfcSQLiteError
+.head 5 -  Number: nIndex
+.head 4 +  Actions
+.head 5 +  If wpbEdit
+.head 6 -  ! Use the original person ID
+.head 6 -  Set uPerson.nivPersonId = wpuPerson.nivPersonId
+.head 5 -  Set uPerson.sivFirstName = dfFirstName
+.head 5 -  Set uPerson.sivLastName = dfLastName
+.head 5 -  !
+.head 5 -  Set nIndex = SalListQuerySelection( cmbCountry )
+.head 5 +  If nIndex > -1
+.head 6 -  Set uPerson.nivCountryId = VisListGetValue( cmbCountry, nIndex )
+.head 5 +  Else
+.head 6 -  Set uPerson.nivCountryId = 0
+.head 5 -  !
+.head 5 +  If wpbEdit
+.head 6 +  If uPerson.Update( uError )
+.head 7 -  Return TRUE
+.head 6 +  Else
+.head 7 -  Call uError.DisplayError(  )
+.head 7 -  Return FALSE
+.head 5 +  Else
+.head 6 +  If uPerson.Insert( uError )
+.head 7 -  Return TRUE
+.head 6 +  Else
+.head 7 -  Call uError.DisplayError(  )
+.head 7 -  Return FALSE
+.head 2 +  Window Parameters
+.head 3 -  FunctionalVar: wpuPerson
+.head 4 -  Class: cfcPerson
+.head 3 -  FunctionalVar: wpuCountries
+.head 4 -  Class: cfcCountryList
+.head 3 -  Boolean: wpbEdit
+.head 2 -  Window Variables
+.head 2 +  Message Actions
+.head 3 +  On SAM_Create
+.head 4 -  Call Init( )
+.head 1 +  Dialog Box: dlgCountries		! List of countries with their flags
+.head 2 -  Class:
+.head 2 -  Property Template:
+.head 2 -  Class DLL Name:
+.head 2 -  Title: Countries
+.head 2 -  Accessories Enabled? No
+.head 2 -  Visible? Yes
+.head 2 -  Display Settings
+.head 3 -  Display Style? Default
+.head 3 -  Visible at Design time? Yes
+.head 3 -  Type of Dialog: Modal
+.head 3 -  Window Location and Size
+.head 4 -  Left: 2.425"
+.head 4 -  Top: 0.583"
+.head 4 -  Width:  6.586"
+.head 4 -  Width Editable? Yes
+.head 4 -  Height: 6.708"
+.head 4 -  Height Editable? Yes
+.head 3 -  Absolute Screen Location? Yes
+.head 3 -  Font Name: Default
+.head 3 -  Font Size: Default
+.head 3 -  Font Enhancement: Default
+.head 3 -  Text Color: Default
+.head 3 -  Background Color: Default
+.head 2 -  Description:
+.head 2 +  Tool Bar
+.head 3 -  Display Settings
+.head 4 -  Display Style? Default
+.head 4 -  Location? Top
+.head 4 -  Visible? Yes
+.head 4 -  Size: Default
+.head 4 -  Size Editable? Yes
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 3 -  Contents
+.head 2 +  Contents
+.head 3 -  Background Text: Flag size:
+.head 4 -  Resource Id: 10319
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Window Location and Size
+.head 5 -  Left: 0.086"
+.head 5 -  Top: 0.094"
+.head 5 -  Width:  1.029"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.167"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Justify: Right
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 3 +  Combo Box: cmbFlagSize
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Window Location and Size
+.head 5 -  Left: 1.186"
+.head 5 -  Top: 0.063"
+.head 5 -  Width:  1.171"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 3.938"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Editable? No
+.head 4 -  String Type: String
+.head 4 -  Maximum Data Length: Default
+.head 4 -  Sorted? No
+.head 4 -  Always Show List? No
+.head 4 -  Vertical Scroll? Yes
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 -  Input Mask: Unformatted
+.head 4 +  List Initialization
+.head 5 -  Text: 16
+.head 5 -  Text: 24
+.head 5 -  Text: 32
+.head 5 -  Text: 48
+.head 5 -  Text: 64
+.head 5 -  Text: 128
+.head 4 +  Message Actions
+.head 5 +  On SAM_Create
+.head 6 -  Set MyValue = "48"
+.head 6 -  Call Init( SalStrToNumber( MyValue )  )
+.head 5 +  On SAM_Click
+.head 6 -  Call Init( SalStrToNumber( MyValue )  )
+.head 3 -  Background Text: Search:
+.head 4 -  Resource Id: 41769
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Window Location and Size
+.head 5 -  Left: 2.517"
+.head 5 -  Top: 0.094"
+.head 5 -  Width:  1.0"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.167"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Justify: Right
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 3 +  Data Field: dfSearch
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Data
+.head 5 -  Maximum Data Length: Default
+.head 5 -  Data Type: String
+.head 5 -  Editable? Yes
+.head 4 -  Display Settings
+.head 5 -  Window Location and Size
+.head 6 -  Left: 3.583"
+.head 6 -  Top: 0.063"
+.head 6 -  Width:  2.8"
+.head 6 -  Width Editable? Yes
+.head 6 -  Height: 0.25"
+.head 6 -  Height Editable? Yes
+.head 5 -  Visible? Yes
+.head 5 -  Border? Yes
+.head 5 -  Justify: Left
+.head 5 -  Format: Unformatted
+.head 5 -  Country: Default
+.head 5 -  Font Name: Default
+.head 5 -  Font Size: Default
+.head 5 -  Font Enhancement: Default
+.head 5 -  Text Color: Default
+.head 5 -  Background Color: Default
+.head 5 -  Input Mask: Unformatted
+.head 4 +  Message Actions
+.head 5 +  On SAM_AnyEdit
+.head 6 -  Call PopulateCountries( )
+.head 3 +  List Box: lbCountries
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class: cOutlineListBox
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Window Location and Size
+.head 5 -  Left: 0.086"
+.head 5 -  Top: 0.354"
+.head 5 -  Width:  6.271"
+.head 5 -  Width Editable? Class Default
+.head 5 -  Height: 5.542"
+.head 5 -  Height Editable? Class Default
+.head 4 -  Visible? Class Default
+.head 4 -  Multiple selection? Class Default
+.head 4 -  Sorted? Class Default
+.head 4 -  Vertical Scroll? Class Default
+.head 4 -  Font Name: Class Default
+.head 4 -  Font Size: Class Default
+.head 4 -  Font Enhancement: Class Default
+.head 4 -  Text Color: Class Default
+.head 4 -  Background Color: Class Default
+.head 4 -  Horizontal Scroll? Class Default
+.head 4 -  List Initialization
+.head 4 +  Message Actions
+.head 5 +  On VTM_Create
+.head 6 -  Call SalSendClassMessage( VTM_Create, wParam, lParam )
+.head 6 -  Call VisListSetStyle( hWndItem, LBS_ShowHorzScrollBar | LBS_SetWidthEachInsert , TRUE )
+.head 5 +  On WM_MOUSEWHEEL
+.head 6 -  ! Fix the ugly listbox scrolling
+.head 6 -  Call PALScrollOnWheel( hWndItem, wParam, 3 )
+.head 6 -  Return 0
+.head 5 +  On SAM_Click
+.head 6 -  Call ManageGUI( )
+.head 3 +  Pushbutton: pbMap
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: Show map
+.head 4 -  Window Location and Size
+.head 5 -  Left: 1.883"
+.head 5 -  Top: 5.948"
+.head 5 -  Width:  1.65"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.292"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call ShowInGoogleMaps( )
+.head 3 +  Pushbutton: pbWiki
+.head 4 -  Class Child Ref Key: 0
+.head 4 -  Class ChildKey: 0
+.head 4 -  Class:
+.head 4 -  Property Template:
+.head 4 -  Class DLL Name:
+.head 4 -  Title: Show WIKI
+.head 4 -  Window Location and Size
+.head 5 -  Left: 0.133"
+.head 5 -  Top: 5.948"
+.head 5 -  Width:  1.65"
+.head 5 -  Width Editable? Yes
+.head 5 -  Height: 0.292"
+.head 5 -  Height Editable? Yes
+.head 4 -  Visible? Yes
+.head 4 -  Keyboard Accelerator: (none)
+.head 4 -  Font Name: Default
+.head 4 -  Font Size: Default
+.head 4 -  Font Enhancement: Default
+.head 4 -  Picture File Name:
+.head 4 -  Picture Transparent Color: None
+.head 4 -  Image Style: Single
+.head 4 -  Text Color: Default
+.head 4 -  Background Color: Default
+.head 4 +  Message Actions
+.head 5 +  On SAM_Click
+.head 6 -  Call ShowInWikipedia( )
+.head 2 +  Functions
+.head 3 +  Function: Init
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 +  Parameters
+.head 5 -  Number: pnFlagSize
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uError
+.head 6 -  Class: cfcSQLiteError
+.head 4 +  Actions
+.head 5 +  If NOT wpuCountries.LoadFlags( TRUE, pnFlagSize, uError )
+.head 6 -  Call uError.DisplayError(  )
+.head 5 -  Call PopulateCountries( )
+.head 3 +  Function: PopulateCountries
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  Number: hRoot
+.head 5 -  Number: hCountry
+.head 5 -  Number: nCount
+.head 5 -  Number: nCountryBitmap
+.head 5 -  Boolean: bPopulated
+.head 5 -  Number: naTabStops[*]
+.head 5 -  FunctionalVar: uError
+.head 6 -  Class: cfcSQLiteError
+.head 4 +  Actions
+.head 5 -  Call SalListClear( lbCountries )
+.head 5 -  Call lbCountries.SetStyle( LBS_ShowNoTree )
+.head 5 -  Call lbCountries.SetIndent( 10 )
+.head 5 -  Set naTabStops[0] = 1.5
+.head 5 -  Set naTabStops[1] = 1.5
+.head 5 -  Call SalListSetTabs( lbCountries, naTabStops )
+.head 5 -  Set hRoot =  VisListGetRoot( lbCountries )
+.head 5 -  Set nCount = 0
+.head 5 +  While nCount < wpuCountries.nivTotalCountries
+.head 6 +  If wpuCountries.uaivCountry[nCount].Match( dfSearch )
+.head 7 -  Set nCountryBitmap = wpuCountries.uaivCountry[nCount].nivFlagVTHandle
+.head 7 -  Set hCountry = VisListLoadChild( lbCountries, hRoot, nCountryBitmap, nCountryBitmap, wpuCountries.uaivCountry[nCount].sivFullName, wpuCountries.uaivCountry[nCount].nivCountryId, 0 )
+.head 7 -  Call VisListLoadChild( lbCountries, hCountry, 0, 0, "__________________________________________" , 0, 0 )
+.head 7 -  Call VisListLoadChild( lbCountries, hCountry, 0, 0, "ID	: " || SalNumberToStrX( wpuCountries.uaivCountry[nCount].nivCountryId, 0 ) , wpuCountries.uaivCountry[nCount].nivCountryId, 0 )
+.head 7 -  Call VisListLoadChild( lbCountries, hCountry, 0, 0, "Short name	: " || wpuCountries.uaivCountry[nCount].sivCountry , wpuCountries.uaivCountry[nCount].nivCountryId, 0 )
+.head 7 -  Call VisListLoadChild( lbCountries, hCountry, 0, 0, "Alpha-2	: " || wpuCountries.uaivCountry[nCount].sivAlpha2 , wpuCountries.uaivCountry[nCount].nivCountryId, 0 )
+.head 7 -  Call VisListLoadChild( lbCountries, hCountry, 0, 0, "Alpha-3	: " || wpuCountries.uaivCountry[nCount].sivAlpha3 , wpuCountries.uaivCountry[nCount].nivCountryId, 0 )
+.head 7 -  Call VisListLoadChild( lbCountries, hCountry, 0, 0, "Latitude	: " || wpuCountries.uaivCountry[nCount].sivLatitude , wpuCountries.uaivCountry[nCount].nivCountryId, 0 )
+.head 7 -  Call VisListLoadChild( lbCountries, hCountry, 0, 0, "Longitude	: " || wpuCountries.uaivCountry[nCount].sivLongitude , wpuCountries.uaivCountry[nCount].nivCountryId, 0 )
+.head 7 -  Call VisListLoadChild( lbCountries, hCountry, 0, 0, "Maps zoom	: " || SalNumberToStrX( wpuCountries.uaivCountry[nCount].nivZoom, 0 ) , wpuCountries.uaivCountry[nCount].nivCountryId, 0 )
+.head 7 -  Call VisListLoadChild( lbCountries, hCountry, 0, 0, "¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯" , 0, 0 )
+.head 7 -  Set bPopulated = TRUE
+.head 6 -  Set nCount = nCount + 1
+.head 5 +  If bPopulated
+.head 6 -  Call VisListShowOutline( lbCountries, 0 )
+.head 6 -  Call lbCountries.Expand( 0 )
+.head 5 -  Call ManageGUI( )
+.head 3 +  Function: ShowInGoogleMaps
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uCountry
+.head 6 -  Class: cfcCountry
+.head 5 -  String: sUrl
+.head 4 +  Actions
+.head 5 +  If GetSelectedCountry( uCountry )
+.head 6 -  Set sUrl = "https://www.google.com/maps/@?api=1&map_action=map&center=" || uCountry.sivLatitude || "," || uCountry.sivLongitude || "&zoom=" || SalNumberToStrX( uCountry.nivZoom, 0 )
+.head 6 -  Call ShellExecuteA( hWndNULL, "open", sUrl, STRING_Null, STRING_Null, 1)
+.head 3 +  Function: ShowInWikipedia
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uCountry
+.head 6 -  Class: cfcCountry
+.head 5 -  String: sUrl
+.head 4 +  Actions
+.head 5 +  If GetSelectedCountry( uCountry )
+.head 6 -  Set sUrl = "http://en.wikipedia.org/wiki/" || uCountry.sivCountry
+.head 6 -  Call ShellExecuteA( hWndNULL, "open", sUrl, STRING_Null, STRING_Null, 1)
+.head 3 +  Function: GetSelectedCountry
+.head 4 -  Description:
+.head 4 +  Returns
+.head 5 -  Boolean:
+.head 4 +  Parameters
+.head 5 -  FunctionalVar: rpuCountry
+.head 6 -  Class: cfcCountry
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  Number: nIndexValue
+.head 5 -  Number: hSelectedItem
+.head 5 -  Number: nCountryId
+.head 5 -  FunctionalVar: uCountry
+.head 6 -  Class: cfcCountry
+.head 5 -  String: sParams
+.head 5 -  String: sUrl
+.head 4 +  Actions
+.head 5 -  Set nIndexValue = SalListQuerySelection ( lbCountries )
+.head 5 +  If nIndexValue != LB_Err
+.head 6 -  Set hSelectedItem = VisListGetItemHandle( lbCountries, nIndexValue )
+.head 6 -  Set nCountryId = VisListGetItemValue( hSelectedItem )
+.head 6 +  If nCountryId > 0
+.head 7 +  If wpuCountries.GetCountryOnId( nCountryId, rpuCountry )
+.head 8 -  Return TRUE
+.head 5 -  Return FALSE
+.head 3 +  Function: ManageGUI
+.head 4 -  Description:
+.head 4 -  Returns
+.head 4 -  Parameters
+.head 4 -  Static Variables
+.head 4 +  Local variables
+.head 5 -  FunctionalVar: uCountry
+.head 6 -  Class: cfcCountry
+.head 4 +  Actions
+.head 5 +  If GetSelectedCountry( uCountry )
+.head 6 -  Call SalEnableWindow( pbMap )
+.head 6 -  Call SalEnableWindow( pbWiki )
+.head 5 +  Else
+.head 6 -  Call SalDisableWindow( pbMap )
+.head 6 -  Call SalDisableWindow( pbWiki )
+.head 2 +  Window Parameters
+.head 3 -  FunctionalVar: wpuCountries
+.head 4 -  Class: cfcCountryList
+.head 2 -  Window Variables
+.head 2 -  Message Actions
